@@ -1,5 +1,6 @@
 #ifdef USE_PRAGMA_ONCE
 #  pragma once
+struct foo {};
 #else
 #  define USE_PRAGMA_ONCE
 #endif

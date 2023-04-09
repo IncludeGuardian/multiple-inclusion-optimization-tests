@@ -24,9 +24,9 @@ def print_results(results):
 REPEAT = 1
 
 command_generator = {
-    'gcc': lambda dir: ['gcc', 'main.cpp', '-E', '-Iguards/' + dir, '-DINCLUDE_GUARD_ALREADY_DEFINED', '-DONCE="once"'],
-    'clang': lambda dir: ['clang', 'main.cpp', '-E', '-Iguards/' + dir, '-DINCLUDE_GUARD_ALREADY_DEFINED', '-DONCE="once"'],
-    'msvc': lambda dir: ['cl', 'main.cpp', '/E', '/Iguards/' + dir, '/DINCLUDE_GUARD_ALREADY_DEFINED', '/DONCE="once"', '>nul' '2>&1'],
+    'gcc': lambda dir: ['gcc', 'main.cpp', '-Iguards/' + dir, '-DINCLUDE_GUARD_ALREADY_DEFINED', '-DONCE=\"once\"'],
+    'clang': lambda dir: ['clang', 'main.cpp', '-Iguards/' + dir, '-DINCLUDE_GUARD_ALREADY_DEFINED', '-DONCE=\"once\"'],
+    'msvc': lambda dir: ['cl', 'main.cpp', '/Iguards/' + dir, '/DINCLUDE_GUARD_ALREADY_DEFINED', '/DONCE=\"once\"', '/DMSVC_ONLY'],
 }
 
 if len(sys.argv) != 2:
@@ -45,7 +45,7 @@ results = []
 for directory in next(os.walk('./guards'))[1]:
     start = time.time()
     for _ in range(REPEAT):
-        subprocess.run(compiler(directory), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(compiler(directory), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).check_returncode()
     elapsed = (time.time() - start)
     results.append({ 'dir': directory, 'elapsed': elapsed });
 

@@ -5,34 +5,48 @@ header files and whether the compilers will avoid opening and preprocessing
 those files if they are `#include`d after the first time.  This is called
 the [multiple-inclusion optimization](https://gcc.gnu.org/onlinedocs/cppinternals/Guard-Macros.html).
 
-| Name                                                                | clang | gcc | msvc |
+## Compiler Agreement
+
+Clang, gcc, and Visual Studio agree on the following guards and whether they
+are eligible for the optimization.
+
+| Name                                                                | Clang | gcc | msvc |
 | ------------------------------------------------------------------- | ----- | --- | ---- |
-| [`include-guard`](guards/include-guard)                             | yes   | yes | yes  |
-| [`pragma-twice`](guards/pragma-twice)                               | yes   | yes | yes  |
 | [`pragma-once`](guards/pragma-once)                                 | yes   | yes | yes  |
-| [`conditional-define`](guards/conditional-define)                   | yes   | yes | yes  |
-| [`transitive-self-inclusion`](guards/transitive-self-inclusion)     | yes   | yes | yes  |
+| [`pragma-twice`](guards/pragma-twice)                               | yes   | yes | yes  |
 | [`pragma-anywhere`](guards/pragma-anywhere)                         | yes   | yes | yes  |
-| [`self-inclusion`](guards/self-inclusion)                           | yes   | yes | yes  |
-| [`between-guard`](guards/between-guard)                             | yes   | yes | yes  |
+| [`_pragma-once`](guards/_pragma-once)                               | yes   | yes | yes  |
+| [`_pragma-def-once`](guards/_pragma-def-once)                       | yes   | yes | yes  |
+| [`include-guard`](guards/include-guard)                             | yes   | yes | yes  |
 | [`include-guard-twice`](guards/include-guard-twice)                 | yes   | yes | yes  |
-| [**`if-not-defined-recursive`**](guards/if-not-defined-recursive)   | yes   | yes |**no**|
-| [**`if-not-defined`**](guards/if-not-defined)                       | yes   | yes |**no**|
-| [**`ms-pragma-once`**](guards/ms-pragma-once)                       | yes   | yes |**no**|
-| [**`already-guarded`**](guards/already-guarded)                     | **no**| yes | yes  |
-| [**`null-directive-outside`**](guards/null-directive-outside)       | **no**| yes | yes  |
-| [`if-guard-not-expr`](guards/if-guard-not-expr)                     | no    | no  |  no  |
-| [`unguarded`](guards/unguarded)                                     | no    | no  |  no  |
-| [`if-guard-not-1`](guards/if-guard-not-1)                           | no    | no  |  no  |
-| [`decl-outside`](guards/decl-outside)                               | no    | no  |  no  |
-| [`if-guard-expr`](guards/if-guard-expr)                             | no    | no  |  no  |
-| [`pragma-def-once`](guards/pragma-def-once)                         | no    | no  |  no  |
-| [`if-guard-1`](guards/if-guard-1)                                   | no    | no  |  no  |
-| [`split-include-guard`](guards/split-include-guard)                 | no    | no  |  no  |
-| [`if-0`](guards/if-0)                                               | no    | no  |  no  |
-| [`reverse-guard`](guards/reverse-guard)                             | no    | no  |  no  |
-| [`if-guard-42`](guards/if-guard-42)                                 | no    | no  |  no  |
-    
+| [`conditional-define`](guards/conditional-define)                   | yes   | yes | yes  |
+| [`between-guard`](guards/between-guard)                             | yes   | yes | yes  |
+| [`transitive-self-inclusion`](guards/transitive-self-inclusion)     | yes   | yes | yes  |
+| [`self-inclusion`](guards/self-inclusion)                           | yes   | yes | yes  |
+| [`if-0`](guards/if-0)                                               | no    | no  | no   |
+| [`if-guard-1`](guards/if-guard-1)                                   | no    | no  | no   |
+| [`if-guard-not-1`](guards/if-guard-not-1)                           | no    | no  | no   |
+| [`if-guard-42`](guards/if-guard-42)                                 | no    | no  | no   |
+| [`if-guard-expr`](guards/if-guard-expr)                             | no    | no  | no   |
+| [`if-guard-not-expr`](guards/if-guard-not-expr)                     | no    | no  | no   |
+| [`split-include-guard`](guards/split-include-guard)                 | no    | no  | no   |
+| [`decl-outside`](guards/decl-outside)                               | no    | no  | no   |
+| [`reverse-guard`](guards/reverse-guard)                             | no    | no  | no   |
+| [`unguarded`](guards/unguarded)                                     | no    | no  | no   |
+
+## Compiler Disagreement
+
+
+Clang, gcc, and Visual Studio **disagree** on the following guards and whether
+they are eligible for the optimization.
+
+| Name                                                                | Clang  | gcc    | msvc   |
+| ------------------------------------------------------------------- | ------ | ------ | ------ |
+| [**`__pragma-once`**](guards/__pragma-once)                         | **no** | **no** |   yes  |
+| [**`if-not-defined`**](guards/if-not-defined)                       |   yes  |   yes  | **no** |
+| [**`if-not-defined-recursive`**](guards/if-not-defined-recursive)   |   yes  |   yes  | **no** |
+| [**`already-guarded`**](guards/already-guarded)                     | **no** |   yes  |   yes  |
+| [**`null-directive-outside`**](guards/null-directive-outside)       | **no** |   yes  |   yes  |
 
 ## Raw Results
 
@@ -45,33 +59,34 @@ Thread model: posix
 InstalledDir: /usr/bin
 
 $ ./run.py clang
-Guarded (12)
-  - include-guard (401ms)
-  - pragma-twice (411ms)
-  - pragma-once (426ms)
-  - conditional-define (444ms)
-  - transitive-self-inclusion (449ms)
-  - pragma-anywhere (454ms)
-  - if-not-defined-recursive (485ms)
-  - if-not-defined (501ms)
-  - self-inclusion (513ms)
-  - ms-pragma-once (520ms)
-  - between-guard (539ms)
-  - include-guard-twice (615ms)
+Guarded (13)
+  - if-not-defined (189ms)
+  - pragma-anywhere (191ms)
+  - include-guard (200ms)
+  - pragma-once (210ms)
+  - include-guard-twice (213ms)
+  - _pragma-once (222ms)
+  - transitive-self-inclusion (224ms)
+  - _pragma-def-once (230ms)
+  - conditional-define (236ms)
+  - self-inclusion (236ms)
+  - pragma-twice (242ms)
+  - if-not-defined-recursive (249ms)
+  - between-guard (268ms)
 Unguarded (13)
-  - already-guarded (1500ms)
-  - if-guard-not-expr (1554ms)
-  - unguarded (1555ms)
-  - if-guard-not-1 (1582ms)
-  - decl-outside (1594ms)
-  - if-guard-expr (1596ms)
-  - pragma-def-once (1600ms)
-  - split-include-guard (1603ms)
-  - null-directive-outside (1611ms)
-  - if-guard-1 (1613ms)
-  - if-0 (1618ms)
-  - reverse-guard (1621ms)
-  - if-guard-42 (1694ms)
+  - already-guarded (670ms)
+  - if-0 (678ms)
+  - if-guard-not-expr (681ms)
+  - if-guard-not-1 (688ms)
+  - split-include-guard (695ms)
+  - if-guard-42 (700ms)
+  - null-directive-outside (709ms)
+  - if-guard-1 (717ms)
+  - if-guard-expr (740ms)
+  - reverse-guard (752ms)
+  - decl-outside (917ms)
+  - unguarded (972ms)
+  - __pragma-once (1042ms)
 ```
 
 ### gcc 9.4.0
@@ -83,68 +98,69 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 $ ./run.py gcc
-Guarded (14)
-  - pragma-twice (13ms)
-  - pragma-anywhere (14ms)
-  - conditional-define (14ms)
-  - ms-pragma-once (14ms)
-  - transitive-self-inclusion (14ms)
-  - pragma-once (16ms)
-  - include-guard (16ms)
-  - if-not-defined-recursive (16ms)
-  - if-not-defined (17ms)
-  - already-guarded (17ms)
-  - between-guard (18ms)
-  - include-guard-twice (18ms)
-  - self-inclusion (19ms)
-  - null-directive-outside (19ms)
+Guarded (15)
+  - _pragma-once (346ms)
+  - already-guarded (347ms)
+  - if-not-defined-recursive (349ms)
+  - conditional-define (355ms)
+  - if-not-defined (357ms)
+  - _pragma-def-once (359ms)
+  - pragma-once (376ms)
+  - pragma-twice (432ms)
+  - include-guard-twice (432ms)
+  - include-guard (435ms)
+  - self-inclusion (441ms)
+  - null-directive-outside (447ms)
+  - pragma-anywhere (447ms)
+  - transitive-self-inclusion (453ms)
+  - between-guard (470ms)
 Unguarded (11)
-  - pragma-def-once (1471ms)
-  - if-guard-1 (1476ms)
-  - if-0 (1483ms)
-  - if-guard-not-1 (1484ms)
-  - reverse-guard (1492ms)
-  - decl-outside (1501ms)
-  - unguarded (1506ms)
-  - split-include-guard (1509ms)
-  - if-guard-expr (1534ms)
-  - if-guard-not-expr (1535ms)
-  - if-guard-42 (1543ms)
+  - if-guard-not-expr (990ms)
+  - __pragma-once (1017ms)
+  - if-guard-expr (1061ms)
+  - unguarded (1070ms)
+  - decl-outside (1091ms)
+  - if-0 (1092ms)
+  - if-guard-42 (1100ms)
+  - if-guard-not-1 (1109ms)
+  - if-guard-1 (1110ms)
+  - split-include-guard (1124ms)
+  - reverse-guard (1127ms)
 ```
 
 ### Microsoft Visual Studio 2022
 
-```cl
+```$ cl
 Microsoft (R) C/C++ Optimizing Compiler Version 19.31.31105 for x86
 Copyright (C) Microsoft Corporation.  All rights reserved.
-```
 
-```run.py msvc
-Guarded (11)
-  - include-guard (120ms)
-  - pragma-twice (121ms)
-  - conditional-define (127ms)
-  - pragma-anywhere (129ms)
-  - between-guard (132ms)
-  - pragma-once (132ms)
-  - self-inclusion (136ms)
-  - null-directive-outside (138ms)
-  - include-guard-twice (138ms)
-  - transitive-self-inclusion (147ms)
-  - already-guarded (260ms)
-Unguarded (14)
-  - unguarded (27366ms)
-  - if-guard-1 (28629ms)
-  - ms-pragma-once (28673ms)
-  - decl-outside (28719ms)
-  - if-guard-not-expr (29043ms)
-  - if-0 (29442ms)
-  - if-not-defined-recursive (29474ms)
-  - if-not-defined (29551ms)
-  - split-include-guard (29988ms)
-  - reverse-guard (30088ms)
-  - pragma-def-once (30148ms)
-  - if-guard-not-1 (30508ms)
-  - if-guard-expr (32925ms)
-  - if-guard-42 (33698ms)
+$ .\run.py msvc
+Guarded (14)
+  - null-directive-outside (114ms)
+  - _pragma-once (114ms)
+  - pragma-twice (115ms)
+  - include-guard-twice (116ms)
+  - _pragma-def-once (119ms)
+  - pragma-once (120ms)
+  - pragma-anywhere (123ms)
+  - include-guard (128ms)
+  - transitive-self-inclusion (129ms)
+  - __pragma-once (131ms)
+  - self-inclusion (134ms)
+  - conditional-define (155ms)
+  - between-guard (157ms)
+  - already-guarded (277ms)
+Unguarded (12)
+  - if-guard-42 (2273ms)
+  - if-not-defined (2286ms)
+  - if-guard-expr (2286ms)
+  - if-not-defined-recursive (2295ms)
+  - if-guard-not-1 (2297ms)
+  - reverse-guard (2300ms)
+  - unguarded (2304ms)
+  - if-0 (2310ms)
+  - split-include-guard (2326ms)
+  - if-guard-not-expr (2332ms)
+  - if-guard-1 (2343ms)
+  - decl-outside (2484ms)
 ```

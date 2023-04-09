@@ -1,13 +1,15 @@
 #ifndef INCLUDE_GUARD
 
+// This header should be using a version of the traditional include guard
+// that will define only on the second time it is included
+
 #ifndef INCLUDE_GUARD_TWICE
 #define INCLUDE_GUARD
+#else
+struct foo {};
 #endif
 
 #define INCLUDE_GUARD_TWICE
-
-// This header should be using a version of the traditional include guard
-// that will define only on the second time it is included
 
 // 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
 // 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789

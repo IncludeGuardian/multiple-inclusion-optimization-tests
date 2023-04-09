@@ -1,9 +1,9 @@
 #ifndef INCLUDE_GUARD
-int foo();
+struct foo {};
 #define INCLUDE_GUARD
 
 // This header should be using a correct version of the traditional include guard
-// but with a function between the `ifndef` and `define`
+// but with a struct definition between the `ifndef` and `define`
 
 // 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
 // 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
