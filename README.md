@@ -48,6 +48,10 @@ they are eligible for the optimization.
 | [**`already-guarded`**](guards/already-guarded)                     | **no** |   yes  |   yes  |
 | [**`null-directive-outside`**](guards/null-directive-outside)       | **no** |   yes  |   yes  |
 
+Note that there is an additional,
+[outstanding performance issue in GCC](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58770)
+when using `#pragma once` that is not shown in these benchmarks.
+
 ## Raw Results
 
 ### clang
