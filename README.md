@@ -40,13 +40,15 @@ are eligible for the optimization.
 Clang, gcc, and Visual Studio **disagree** on the following guards and whether
 they are eligible for the optimization.
 
-| Name                                                                | Clang  | gcc    | msvc   |
-| ------------------------------------------------------------------- | ------ | ------ | ------ |
-| [**`__pragma-once`**](guards/__pragma-once)                         | **no** | **no** |   yes  |
-| [**`if-not-defined`**](guards/if-not-defined)                       |   yes  |   yes  | **no** |
-| [**`if-not-defined-recursive`**](guards/if-not-defined-recursive)   |   yes  |   yes  | **no** |
-| [**`already-guarded`**](guards/already-guarded)                     | **no** |   yes  |   yes  |
-| [**`null-directive-outside`**](guards/null-directive-outside)       | **no** |   yes  |   yes  |
+| Name                                                                | Clang    | gcc    | msvc   |
+| ------------------------------------------------------------------- | -------- | ------ | ------ |
+| [**`__pragma-once`**](guards/__pragma-once)                         | **no**   | **no** |   yes  |
+| [**`if-not-defined`**](guards/if-not-defined)                       |   yes    |   yes  | **no** |
+| [**`if-not-defined-recursive`**](guards/if-not-defined-recursive)   |   yes    |   yes  | **no** |
+| [**`already-guarded`**](guards/already-guarded)                     | **no**   |   yes  |   yes  |
+| [**`null-directive-outside`**](guards/null-directive-outside)       | **no**\* |   yes  |   yes  |
+
+\* fixed in Clang 17 ([D147928](https://reviews.llvm.org/D147928)).
 
 Note that there is an additional,
 [outstanding performance issue in GCC](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58770)
